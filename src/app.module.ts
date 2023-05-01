@@ -4,6 +4,9 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { StateModule } from './state/state.module';
 import { AuthModule } from './auth/auth.module';
+import { CityModule } from './city/city.module';
+import { AddressModule } from './address/address.module';
+
 
 @Module({
   imports: [UserModule, ConfigModule.forRoot({
@@ -21,7 +24,10 @@ import { AuthModule } from './auth/auth.module';
       migrationsRun: true
     }),
     StateModule,
-    AuthModule],
+    AuthModule,
+    CityModule,
+    AddressModule
+  ],
   controllers: [],
   providers: [],
 })
