@@ -35,4 +35,4 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 .env.development.local
-src\auth\utils\constants.ts
+/src/auth/utils/constants.ts
