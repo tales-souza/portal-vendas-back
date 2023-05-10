@@ -2,12 +2,14 @@ import { Body, Controller, Get, Param, Post, UsePipes, ValidationPipe } from '@n
 import { createUserDto } from './dtos/createUser.dto';
 import { UserService } from './user.service';
 import { ReturnUserDto } from './dtos/returnUser.dto';
-import { UserEntity } from './interfaces/user.entity';
+import { Roles } from 'src/auth/roles/roles.decorator';
+import { Role } from 'src/auth/roles/roles.enum';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) { }
 
+  @Roles(Role.Admin)
   @Get()
   async getAllUsers(): Promise<ReturnUserDto[]> {
     return (await this.userService.getAllUsers()).map(
@@ -22,7 +24,7 @@ export class UserController {
     return new ReturnUserDto(user);
   }
 
-
+  @Roles(Role.Admin)
   @Get('/:userId')
   async findUserWithRelation(@Param() param: { userId: number }): Promise<ReturnUserDto> {
     const user = await this.userService.findUserWithRelation(param.userId);
