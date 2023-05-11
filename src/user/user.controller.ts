@@ -1,9 +1,9 @@
 import { Body, Controller, Get, Param, Post, UsePipes, ValidationPipe } from '@nestjs/common';
-import { createUserDto } from './dtos/createUser.dto';
+import { CreateUserDto } from './dtos/createUser.dto';
 import { UserService } from './user.service';
 import { ReturnUserDto } from './dtos/returnUser.dto';
-import { Roles } from 'src/auth/roles/roles.decorator';
-import { Role } from 'src/auth/roles/roles.enum';
+import { Roles } from '../auth/roles/roles.decorator';
+import { Role } from '../auth/roles/roles.enum';
 
 @Controller('user')
 export class UserController {
@@ -19,7 +19,7 @@ export class UserController {
 
   @UsePipes(ValidationPipe)
   @Post()
-  async createUser(@Body() createUser: createUserDto): Promise<ReturnUserDto> {
+  async createUser(@Body() createUser: CreateUserDto): Promise<ReturnUserDto> {
     const user = await this.userService.createUser(createUser);
     return new ReturnUserDto(user);
   }

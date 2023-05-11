@@ -1,7 +1,7 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import { createUserDto } from './dtos/createUser.dto';
+import { CreateUserDto } from './dtos/createUser.dto';
 import { UserEntity } from './interfaces/user.entity';
 import * as bcrypt from 'bcrypt';
 
@@ -13,20 +13,22 @@ export class UserService {
         private readonly userRepository: Repository<UserEntity>
     ) { }
 
-    async createUser(createUserDto: createUserDto): Promise<UserEntity> {
+    async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
 
         const saltOrRounds = 10;
         const passwordHash = await bcrypt.hash(createUserDto.password, saltOrRounds);
 
         /*verifica se o email já existe*/
-        const userAlreadyExists = await this.getUserByMail(createUserDto.email);
+        const userAlreadyExists = await this.findUserByMail(createUserDto.email);
 
         if (userAlreadyExists) {
-            throw new HttpException({
-                status: HttpStatus.BAD_REQUEST,
-                error: "user already exists"
-            }, HttpStatus.BAD_REQUEST,
-            )
+            /* throw new HttpException({
+                 status: HttpStatus.BAD_REQUEST,
+                 error: "user already exists"
+             }, HttpStatus.BAD_REQUEST,
+             )*/
+
+            throw new BadRequestException("user already exists");
         }
 
         return this.userRepository.save({
@@ -41,7 +43,7 @@ export class UserService {
         return await this.userRepository.find();
     }
 
-    async getUserByMail(email: string): Promise<UserEntity | undefined> {
+    async findUserByMail(email: string): Promise<UserEntity | undefined> {
         return await this.userRepository.findOneBy({
             email: email
         })
@@ -58,21 +60,19 @@ export class UserService {
 
     }
 
-    async findUserWithRelation(userId: number): Promise<UserEntity>{
+    async findUserWithRelation(userId: number): Promise<UserEntity> {
         const user = await this.userRepository.findOne({
-            where:{
+            where: {
                 id: userId
             },
             relations: {
-                addresses:{
-                    city:{
+                addresses: {
+                    city: {
                         state: true
                     }
                 }
             }
         });
-
         return user
     }
-
 }

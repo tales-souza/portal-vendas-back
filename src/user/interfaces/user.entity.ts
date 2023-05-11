@@ -1,4 +1,4 @@
-import { AddressEntity } from 'src/address/interfaces/address.entity';
+import { AddressEntity } from '../../address/interfaces/address.entity';
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany, JoinColumn } from 'typeorm';
 
 
@@ -35,7 +35,7 @@ export class UserEntity {
 
 
     @OneToMany(() => AddressEntity, (adress) => adress.user)
-    addresses: AddressEntity[]
+    addresses?: AddressEntity[]
 
 
   }

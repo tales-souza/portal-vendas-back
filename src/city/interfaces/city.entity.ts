@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
-import { AddressEntity } from 'src/address/interfaces/address.entity';
-import { StateEntity } from 'src/state/interfaces/state.entity';
+import { AddressEntity } from '../../address/interfaces/address.entity';
+import { StateEntity } from '../../state/interfaces/state.entity';
 
 
 @Entity({ name: 'city' })

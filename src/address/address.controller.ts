@@ -3,8 +3,8 @@ import { CreateAddressDto } from './dtos/createAddress.dto';
 import { AddressEntity } from './interfaces/address.entity';
 import { AddressService } from './address.service';
 import { AuthGuard } from '../auth/auth.guard';
-import { Roles } from 'src/auth/roles/roles.decorator';
-import { Role } from 'src/auth/roles/roles.enum';
+import { Roles } from '../auth/roles/roles.decorator';
+import { Role } from '../auth/roles/roles.enum';
 
 @Controller('address')
 export class AddressController {
