@@ -14,7 +14,7 @@ export class AuthService {
     ) { }
 
     async signIn({ email, pass }: signInDto): Promise<any> {
-        const user = await this.userService.getUserByMail(email);
+        const user = await this.userService.findUserByMail(email);
 
         if (!user) {
             throw new UnauthorizedException('Email or password inválid');
@@ -29,7 +29,7 @@ export class AuthService {
         const payload = { typeUser: user.typeUser, sub: user.id }
 
         return {
-            acess_token: await this.jwtService.signAsync(payload),
+            accessToken: await this.jwtService.signAsync(payload),
             user: new ReturnUserDto(user)
 
         }
