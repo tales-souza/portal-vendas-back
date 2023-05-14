@@ -9,6 +9,8 @@ import { AddressModule } from './address/address.module';
 import { CacheModule } from './cache/cache.module';
 import { RolesGuard } from './auth/roles/roles.guard';
 import { APP_GUARD } from '@nestjs/core';
+import { CategoryModule } from './category/category.module';
+import { ProductModule } from './product/product.module';
 
 
 
@@ -31,7 +33,9 @@ import { APP_GUARD } from '@nestjs/core';
     AuthModule,
     CityModule,
     AddressModule,
-    CacheModule
+    CacheModule,
+    CategoryModule,
+    ProductModule
   ],
   controllers: [],
   providers: [{
