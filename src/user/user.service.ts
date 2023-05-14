@@ -22,12 +22,6 @@ export class UserService {
         const userAlreadyExists = await this.findUserByMail(createUserDto.email);
 
         if (userAlreadyExists) {
-            /* throw new HttpException({
-                 status: HttpStatus.BAD_REQUEST,
-                 error: "user already exists"
-             }, HttpStatus.BAD_REQUEST,
-             )*/
-
             throw new BadRequestException("user already exists");
         }
 
@@ -37,7 +31,6 @@ export class UserService {
             typeUser: 1
         })
     }
-
 
     async getAllUsers(): Promise<UserEntity[]> {
         return await this.userRepository.find();
