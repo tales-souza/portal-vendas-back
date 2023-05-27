@@ -29,7 +29,6 @@ export class UserController {
   async findUserWithRelation(@Param() param: { userId: number }): Promise<ReturnUserDto> {
     const user = await this.userService.findUserWithRelation(param.userId);
     return new ReturnUserDto(user);
-
   }
 
 

@@ -11,10 +11,10 @@ export class ProductEntity {
     name: string;
     
     @Column({ name: 'category_id', nullable: false })
-    categoryId: string;
+    categoryId: number;
 
     @Column({ name: 'price', nullable: false })
-    price: string;
+    price: number;
 
     @Column({ name: 'image' })
     image: string;
@@ -27,7 +27,7 @@ export class ProductEntity {
 
     @ManyToOne(() => CategoryEntity, (category) => category.products)
     @JoinColumn({ name: 'category_id', referencedColumnName: 'id' })
-    category: CategoryEntity
+    category?: CategoryEntity
 }
 
 
