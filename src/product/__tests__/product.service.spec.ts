@@ -8,6 +8,7 @@ import { createProductMock } from '../__mocks__/createProduct.mock';
 import { CategoryService } from '../../category/category.service';
 import { categoryMockEntity } from '../../category/__mocks__/category.mock';
 import { returnDeleteProductMock } from '../__mocks__/returnDeleteProduct.mock';
+import { updateProductMock } from '../__mocks__/updateProduct.mock';
 
 describe('ProductService', () => {
   let service: ProductService;
@@ -88,6 +89,11 @@ describe('ProductService', () => {
   it('should return deleted true in delete product', async() => {
     const result = await service.deleteProductById(productMock.id);
     expect(result).toEqual(returnDeleteProductMock);
+  });
+
+  it('shoud return product after update', async() => {
+    const product = await service.updateProductById(updateProductMock, productMock.id);
+    expect(product).toEqual(productMock)
   });
 
 });
