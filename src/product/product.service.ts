@@ -1,15 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductEntity } from './interfaces/product.entity';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { CreateProductDto } from './dtos/createProduct.dto';
-import { CategoryService } from 'src/category/category.service';
+import { CategoryService } from '../category/category.service';
 
 @Injectable()
 export class ProductService {
     constructor(@InjectRepository(ProductEntity)
     private readonly productRepository: Repository<ProductEntity>,
-    private categoryService: CategoryService
+        private categoryService: CategoryService
     ) { }
 
     async findAllProducts(): Promise<ProductEntity[]> {
@@ -25,11 +25,26 @@ export class ProductService {
 
         return products;
     }
-    async createProduct(createProductDto: CreateProductDto): Promise<ProductEntity>{
-
-        const categoryId = await this.categoryService.findCategoryById(createProductDto.categoryId);
-
+    async createProduct(createProductDto: CreateProductDto): Promise<ProductEntity> {
+        await this.categoryService.findCategoryById(createProductDto.categoryId);
         const product = await this.productRepository.save(createProductDto);
         return product;
+    }
+
+    async findProductById(productId: number): Promise<ProductEntity> {
+        const product = await this.productRepository.findOne({
+            where: {
+                id: productId
+            }
+        });
+        if (!product) {
+            throw new NotFoundException(`product ${productId} not found`);
+        }
+        return product;
+    }
+
+    async deleteProductById(productId: number) : Promise<DeleteResult> {
+        await this.findProductById(productId);
+        return await this.productRepository.delete({ id: productId });
     }
 }
