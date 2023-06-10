@@ -1,9 +1,10 @@
-import { Controller, ValidationPipe, UsePipes, Post, Body, Request, Get, Delete } from '@nestjs/common';
+import { Controller, ValidationPipe, UsePipes, Post, Body, Request, Get, Delete, Param } from '@nestjs/common';
 import { CartService } from './cart.service';
 import { Roles } from '../auth/roles/roles.decorator';
 import { Role } from '../auth/roles/roles.enum';
 import { InsertProductInCartDto } from './dtos/insertProductInCart.dto';
 import { ReturnCartDto } from './dtos/returnCartdto';
+import { DeleteResult } from 'typeorm';
 
 @Controller('cart')
 export class CartController {
@@ -30,5 +31,12 @@ export class CartController {
     async clearCart(@Request() req): Promise<void> {
         const cart = await this.cartService.clearCart(req.user.sub)
     }
+
+    @Roles(Role.Admin, Role.User)
+    @Delete('product/:productId')
+    async deleteProductInCart(@Request() req, @Param() param: { productId: number }): Promise<DeleteResult> {
+        return await this.cartService.deleteProductInCart(param.productId, req.user.sub)
+    }
+
 
 }
