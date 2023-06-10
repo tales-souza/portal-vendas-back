@@ -11,6 +11,8 @@ import { RolesGuard } from './auth/roles/roles.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { CategoryModule } from './category/category.module';
 import { ProductModule } from './product/product.module';
+import { CartModule } from './cart/cart.module';
+import { CartProductModule } from './cart-product/cart-product.module';
 
 
 
@@ -35,7 +37,9 @@ import { ProductModule } from './product/product.module';
     AddressModule,
     CacheModule,
     CategoryModule,
-    ProductModule
+    ProductModule,
+    CartModule,
+    CartProductModule
   ],
   controllers: [],
   providers: [{

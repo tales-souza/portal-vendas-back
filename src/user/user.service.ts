@@ -1,9 +1,10 @@
-import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { CreateUserDto } from './dtos/createUser.dto';
 import { UserEntity } from './interfaces/user.entity';
-import * as bcrypt from 'bcrypt';
+import { UpdatePasswordDto } from './dtos/updatePassword.dto';
+import { createPassword, verifyPassword } from './utils/bcryptFunctions';
 
 
 @Injectable()
@@ -15,8 +16,7 @@ export class UserService {
 
     async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
 
-        const saltOrRounds = 10;
-        const passwordHash = await bcrypt.hash(createUserDto.password, saltOrRounds);
+        const passwordHash = await createPassword(createUserDto.password);
 
         /*verifica se o email já existe*/
         const userAlreadyExists = await this.findUserByMail(createUserDto.email);
@@ -68,4 +68,20 @@ export class UserService {
         });
         return user
     }
+
+    async updatePassword(updatePasswordDto: UpdatePasswordDto, userId: number): Promise<UserEntity> {
+        const user = await this.findUserById(userId);
+        const isMatch = await verifyPassword(updatePasswordDto.oldPassword, user?.password);
+
+        if (!isMatch) {
+            throw new UnauthorizedException('old password is inválid');
+        }
+        const passwordHash = await createPassword(updatePasswordDto.newPassword);
+
+        return await this.userRepository.save({
+            ...user,
+            password: passwordHash
+        });
+    }
 }
+
